@@ -4,11 +4,22 @@ from django.http import JsonResponse
 
 from django.shortcuts import render, redirect
 
+from django.template.loader import render_to_string
+
+from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_str, force_bytes
+
 from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetConfirmView
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.sites.shortcuts import get_current_site
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view
@@ -42,6 +53,28 @@ def prepare_response(request, html_file):
         response.set_cookie('lang', request.GET.get('lang'))
 
     return response
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'password_reset_confirm.html'
+
+    def post(self, request, *args, **kwargs):
+        uid = force_str(urlsafe_base64_decode(kwargs['uidb64']))
+        user = User.objects.get(pk=uid)
+        post_data = {
+            'new_password1': request.POST['password'],
+            'new_password2': request.POST['confirm_password'],
+        }
+        form = SetPasswordForm(user, post_data)
+        if form.is_valid():
+            user = form.save()
+            # update_session_auth_hash(request, user)
+            return redirect('login')
+
+        return JsonResponse({'error': 'Invalid password'}, status=400)
+
+    def get(self, request, *args, **kwargs):
+        return prepare_response(request, self.template_name)
 
 
 def register(request):
@@ -83,18 +116,22 @@ def login(request):
 def reset_request(request):
     email = request.POST['email']
     if User.objects.filter(email=email).exists():
-        '''
         user = User.objects.get(email=email)
-        profile, created = UserProfile.objects.get_or_create(user=user)
-        profile.generate_otp()
-        send_mail(
-            'Password Reset Request',
-            f'Your OTP is: {profile.otp}.',
-            'marathononline0@gmail.com',
-            [user.email],
-            fail_silently=False,
-        )
-        '''
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        current_site = get_current_site(request)
+        reset_link = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        reset_url = f"http://{current_site.domain}{reset_link}"
+        email_subject = 'Password Reset Request'
+        html_content = render_to_string('email/password_reset_email.html', {
+            'user': user,
+            'reset_url': reset_url,
+            'domain': current_site.domain
+        })
+        text_content = f'Hello {user.username},\n\nYou requested a password reset for your account at {current_site.domain}. Please click the link below to reset your password:\n{reset_url}\n\nIf you didn\'t request this, please ignore this email. Your password will remain unchanged.'
+        message = EmailMultiAlternatives(email_subject, html_content, 'marathononline0@gmail.com', [user.email])
+        message.attach_alternative(html_content, "text/html")
+        message.send()
         return redirect('password_reset_sent')
 
     return JsonResponse({'error': 'Email not found.'}, status=400)

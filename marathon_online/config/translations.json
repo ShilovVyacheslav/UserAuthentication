@@ -5,6 +5,7 @@
         "Username": "Username",
         "Email": "Email",
         "Password": "Password",
+        "ConfirmPassword": "Confirm password",
         "AlreadyHaveAnAccount": "Already have an account?",
         "LoginHere": "Login here",
         "ForgotPassword": "Forgot password?",
@@ -13,7 +14,8 @@
         "ResetYourPassword": "Reset your password",
         "SendPasswordResetEmail": "Send password reset email",
         "BackToLogin": "Back to Login",
-        "CheckPasswordResetEmail": "Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder."
+        "CheckPasswordResetEmail": "Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder.",
+        "ChangePassword": "Change password"
     },
     "ru": {
         "SignUp": "Зарегистрироваться",
@@ -21,6 +23,7 @@
         "Username": "Имя пользователя",
         "Email": "Электронная почта",
         "Password": "Пароль",
+        "ConfirmPassword": "Подтвердите пароль",
         "AlreadyHaveAnAccount": "У вас уже есть аккаунт?",
         "LoginHere": "Войти",
         "ForgotPassword": "Забыли пароль?",
@@ -29,6 +32,7 @@
         "ResetYourPassword": "Сбросьте свой пароль",
         "SendPasswordResetEmail": "Отправить письмо для сброса пароля",
         "BackToLogin": "Вернуться, чтобы войти",
-        "CheckPasswordResetEmail": "Проверьте свою электронную почту на наличие ссылки для сброса пароля. Если она не появится в течение нескольких минут, проверьте папку со спамом."
+        "CheckPasswordResetEmail": "Проверьте свою электронную почту на наличие ссылки для сброса пароля. Если она не появится в течение нескольких минут, проверьте папку со спамом.",
+        "ChangePassword": "Измените пароль"
     }
 }

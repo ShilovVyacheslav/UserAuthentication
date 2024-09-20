@@ -6,7 +6,7 @@ body {
     height: 100vh;
 }
 
-.register-container, .login-container, .password-reset-container, .password-reset-sent-container {
+.container {
     width: 100%;
     max-width: 80%;
     background-color: #ffffff;
@@ -21,7 +21,7 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.register-container h2, .login-container h2, .password-reset-container h2 {
+.container h2 {
     margin-bottom: 1.5rem;
     color: #333;
 }
@@ -46,7 +46,7 @@ body {
     box-sizing: border-box;
 }
 
-.register-button, .login-button, .password-reset-button {
+.register-button, .login-button, .password-reset-button, .password-reset-change-button {
     width: 100%;
     padding: 0.75rem;
     background-color: #007bff;
@@ -98,17 +98,17 @@ body {
 }
 
 @media (min-width: 768px) {
-    .register-container, .login-container, .password-reset-container, .password-reset-sent-container {
+    .container {
         max-width: 70%;
     }
 
-    .register-button, .login-button, .password-reset-button {
+    .register-button, .login-button, .password-reset-button, .password-reset-change-button {
         font-size: 1.15rem;
     }
 }
 
 @media (min-width: 1024px) {
-    .register-container, .login-container, .password-reset-container, .password-reset-sent-container {
+    .container {
         max-width: 32%;
     }
 }

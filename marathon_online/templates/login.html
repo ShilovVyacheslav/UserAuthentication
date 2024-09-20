@@ -8,13 +8,13 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/authenticate_styles.css' %}">
 </head>
 <body>
-    <div class="login-container">
+    <div class="container">
         <div class="language-switcher">
             <a href="?lang=en" class="language-link">English</a> |
             <a href="?lang=ru" class="language-link">Русский</a>
         </div>
         <h2>{{ translations.SignIn }}</h2>
-        <form method="post" class="login-form">
+        <form method="post" class="authenticate-form">
             {% csrf_token %}
             <div class="authenticate-form-group">
                 <label for="identifier">{{ translations.Username }} / {{ translations.Email }}:</label>
